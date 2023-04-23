@@ -66,4 +66,27 @@ describe("exams", () => {
   test("GET/api/exams should return status 400 if using a query that is not a number", () => {
     return request(app).get("/api/exams?id=notID").expect(400);
   });
+  test("GET/api/exams should return the requested data if using the query for location", () => {
+    return request(app)
+      .get("/api/exams?location=London")
+      .expect(200)
+      .then((res) => {
+        expect(res.body.exams.length).toBe(11);
+        res.body.exams.map((exam) => {
+          expect(exam).toEqual(
+            expect.objectContaining({
+              id: expect.any(Number),
+              title: expect.any(String),
+              description: expect.any(String),
+              candidate_id: expect.any(Number),
+              date: expect.any(String),
+              location_name: "London",
+            })
+          );
+        });
+      });
+  });
+  test("GET/api/exams should return status 400 if using a query for a none existent location ", () => {
+    return request(app).get("/api/exams?location=Banana").expect(400);
+  });
 });
