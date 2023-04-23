@@ -1,12 +1,18 @@
-const dotenv = require("dotenv");
-const mysql = require("mysql2");
-dotenv.config();
+const { Pool } = require("pg");
 
-const con = mysql.createConnection({
-  host: process.env.HOST,
-  user: process.env.USER,
-  password: process.env.PASSWORD,
-  database: process.env.DATABASE,
-});
+const ENV = process.env.NODE_ENV || "development";
+require("dotenv").config({ path: `${__dirname}/../.env.${ENV}` });
 
-module.exports = con;
+if (!process.env.PGDATABASE && !process.env.DATABASE_URL) {
+  throw new Error("PGDATABASE or DATABASE_URL not set");
+}
+
+const config =
+  ENV === "production"
+    ? {
+        connectionString: process.env.DATABASE_URL,
+        max: 2,
+      }
+    : {};
+
+module.exports = new Pool(config);
