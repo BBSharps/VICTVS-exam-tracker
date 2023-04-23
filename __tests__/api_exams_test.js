@@ -29,6 +29,7 @@ describe("exams", () => {
               description: expect.any(String),
               candidate_id: expect.any(Number),
               date: expect.any(String),
+              time: expect.any(String),
               location_name: expect.any(String),
             })
           );
@@ -49,6 +50,7 @@ describe("exams", () => {
               description: expect.any(String),
               candidate_id: 3,
               date: expect.any(String),
+              time: expect.any(String),
               location_name: expect.any(String),
             })
           );
@@ -80,6 +82,7 @@ describe("exams", () => {
               description: expect.any(String),
               candidate_id: expect.any(Number),
               date: expect.any(String),
+              time: expect.any(String),
               location_name: "London",
             })
           );
@@ -88,5 +91,37 @@ describe("exams", () => {
   });
   test("GET/api/exams should return status 400 if using a query for a none existent location ", () => {
     return request(app).get("/api/exams?location=Banana").expect(400);
+  });
+  test("GET/api/exams should return the requested data if using the query for date", () => {
+    return request(app)
+      .get("/api/exams?date=17/06/2023")
+      .expect(200)
+      .then((res) => {
+        expect(res.body.exams.length).toBe(1);
+        res.body.exams.map((exam) => {
+          expect(exam).toEqual(
+            expect.objectContaining({
+              id: expect.any(Number),
+              title: expect.any(String),
+              description: expect.any(String),
+              candidate_id: expect.any(Number),
+              date: "17/06/2023",
+              time: expect.any(String),
+              location_name: expect.any(String),
+            })
+          );
+        });
+      });
+  });
+  test("GET/api/exams should return empty if using a query for a date that has no exams", () => {
+    return request(app)
+      .get("/api/exams?date=1/1/2000")
+      .expect(200)
+      .then((res) => {
+        expect(res.body.exams.length).toBe(0);
+      });
+  });
+  test("GET/api/exams should return status 400 if using a query for a none existent date ", () => {
+    return request(app).get("/api/exams?date=Banana").expect(400);
   });
 });

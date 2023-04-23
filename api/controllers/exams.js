@@ -2,13 +2,19 @@ const { selectExams } = require("../models/exams");
 
 exports.getExams = (req, res, next) => {
   const id = req.query.id;
+  const date = req.query.date;
   const location = req.query.location;
   let query = true;
+  if (date !== undefined) {
+    if (!Number(date.split("/")[2])) {
+      query = false;
+    }
+  }
   id !== undefined && !Number(id) && Number(id) !== 0 ? (query = false) : null;
   if (!query) {
     return res.status(400).send({ error: "incorrect query" });
   } else {
-    selectExams(id, location).then((data) => {
+    selectExams(id, location, date).then((data) => {
       if (data === 400) {
         return res.status(400).send({ error: "incorrect query" });
       }

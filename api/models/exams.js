@@ -1,11 +1,15 @@
 const db = require("../../database/index");
 
-exports.selectExams = (id, location) => {
+exports.selectExams = (id, location, date) => {
   const queryArray = [];
   let queryString = `SELECT * FROM exams`;
   if (id !== undefined) {
     queryArray.push(id);
     queryString += ` WHERE candidate_id= $${queryArray.indexOf(id) + 1}`;
+  }
+  if (date !== undefined) {
+    queryArray.push(date);
+    queryString += ` WHERE date= $${queryArray.indexOf(date) + 1}`;
   }
   if (location !== undefined) {
     queryArray.push(location);
