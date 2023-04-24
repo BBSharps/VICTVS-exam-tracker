@@ -21,11 +21,15 @@ exports.getExams = (req, res, next) => {
   if (!query) {
     return res.status(400).send({ error: "incorrect query" });
   } else {
-    selectExams(id, location, date, order).then((data) => {
-      if (data === 400) {
-        return res.status(400).send({ error: "incorrect query" });
-      }
-      return res.send({ exams: data });
-    });
+    selectExams(id, location, date, order)
+      .then((data) => {
+        if (data === 400) {
+          return res.status(400).send({ error: "incorrect query" });
+        }
+        return res.send({ exams: data });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 };
