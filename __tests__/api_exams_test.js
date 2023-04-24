@@ -2,6 +2,7 @@ const app = require("../api/app");
 const request = require("supertest");
 const { seed } = require("../database/seed");
 const db = require("../database/index");
+const data = require("../database/TechTestJson.json");
 
 beforeEach(() => seed());
 afterAll(() => db.end());
@@ -138,6 +139,77 @@ describe("exams", () => {
             })
           );
         });
+      });
+  });
+  test("GET/api/exams should return the requested data in date Descending if passed an order by desc", () => {
+    return request(app)
+      .get("/api/exams?order=desc")
+      .expect(200)
+      .then((res) => {
+        expect(res.body.exams.length).toBe(20);
+        const sortedData = data
+          .sort((a, b) => (a.Date < b.Date ? 1 : b.Date < a.Date ? -1 : 0))
+          .map((exam) => {
+            return exam.Date.slice(0, 10);
+          });
+        const examsDates = res.body.exams.map((exam) => {
+          return exam.date;
+        });
+        expect(examsDates).toEqual(sortedData);
+      });
+  });
+  test("GET/api/exams should return the requested data in date Ascending if passed an order by asc ", () => {
+    return request(app)
+      .get("/api/exams?order=asc")
+      .expect(200)
+      .then((res) => {
+        expect(res.body.exams.length).toBe(20);
+        const sortedData = data
+          .sort((a, b) => (a.Date > b.Date ? 1 : b.Date > a.Date ? -1 : 0))
+          .map((exam) => {
+            return exam.Date.slice(0, 10);
+          });
+        const examsDates = res.body.exams.map((exam) => {
+          return exam.date;
+        });
+        expect(examsDates).toEqual(sortedData);
+      });
+  });
+  test("GET/api/exams should return status 400 if using order that is not asc or desc ", () => {
+    return request(app).get("/api/exams?order=Banana").expect(400);
+  });
+  test("GET/api/exams should return the requested data if using querys for location,id and order by date", () => {
+    return request(app)
+      .get("/api/exams?order=asc&id=0&location=London")
+      .expect(200)
+      .then((res) => {
+        expect(res.body.exams.length).toBe(11);
+        res.body.exams.map((exam) => {
+          expect(exam).toEqual(
+            expect.objectContaining({
+              title: expect.any(String),
+              description: expect.any(String),
+              candidate_id: 0,
+              date: expect.any(String),
+              time: expect.any(String),
+              location_name: "London",
+            })
+          );
+        });
+        const sortedData = data
+          .sort((a, b) => (a.Date > b.Date ? 1 : b.Date > a.Date ? -1 : 0))
+          .map((exam) => {
+            if (exam.Candidateid === 0 && exam.LocationName === "London")
+              return exam.Date.slice(0, 10);
+          })
+          .filter((exam) => {
+            return exam !== undefined;
+          });
+        console.log(sortedData);
+        const examsDates = res.body.exams.map((exam) => {
+          return exam.date;
+        });
+        expect(examsDates).toEqual(sortedData);
       });
   });
 });

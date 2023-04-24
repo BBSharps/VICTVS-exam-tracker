@@ -1,6 +1,6 @@
 const db = require("../../database/index");
 
-exports.selectExams = (id, location, date) => {
+exports.selectExams = (id, location, date, order) => {
   const queryArray = [];
   let queryString = `SELECT title, description, candidate_id, date, time, location_name FROM exams`;
   if (id !== undefined || date !== undefined || location !== undefined) {
@@ -23,6 +23,10 @@ exports.selectExams = (id, location, date) => {
       queryString += ` AND`;
     }
     queryString += ` (location_name = $${queryArray.indexOf(location) + 1})`;
+  }
+  if (order !== undefined) {
+    queryString += ` ORDER BY date`;
+    order === "desc" ? (queryString += ` DESC`) : (queryString += ` ASC`);
   }
   return db.query(queryString, queryArray).then((res) => {
     if (location !== undefined && res.rowCount === 0) {
