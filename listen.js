@@ -1,7 +1,5 @@
-const express = require("express");
+const app = require("./app");
 
-const app = express();
-
-app.listen(3000, () => {
+app.listen(9001, () => {
   console.log("listening");
 });
