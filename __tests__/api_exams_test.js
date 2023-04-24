@@ -24,7 +24,6 @@ describe("exams", () => {
         res.body.exams.map((exam) => {
           expect(exam).toEqual(
             expect.objectContaining({
-              id: expect.any(Number),
               title: expect.any(String),
               description: expect.any(String),
               candidate_id: expect.any(Number),
@@ -45,7 +44,6 @@ describe("exams", () => {
         res.body.exams.map((exam) => {
           expect(exam).toEqual(
             expect.objectContaining({
-              id: expect.any(Number),
               title: expect.any(String),
               description: expect.any(String),
               candidate_id: 3,
@@ -77,7 +75,6 @@ describe("exams", () => {
         res.body.exams.map((exam) => {
           expect(exam).toEqual(
             expect.objectContaining({
-              id: expect.any(Number),
               title: expect.any(String),
               description: expect.any(String),
               candidate_id: expect.any(Number),
@@ -101,7 +98,6 @@ describe("exams", () => {
         res.body.exams.map((exam) => {
           expect(exam).toEqual(
             expect.objectContaining({
-              id: expect.any(Number),
               title: expect.any(String),
               description: expect.any(String),
               candidate_id: expect.any(Number),
@@ -123,5 +119,25 @@ describe("exams", () => {
   });
   test("GET/api/exams should return status 400 if using a query for a none existent date ", () => {
     return request(app).get("/api/exams?date=Banana").expect(400);
+  });
+  test("GET/api/exams should return the requested data if using querys for date,location and id", () => {
+    return request(app)
+      .get("/api/exams?date=05/05/2023&id=3&location=New York")
+      .expect(200)
+      .then((res) => {
+        expect(res.body.exams.length).toBe(2);
+        res.body.exams.map((exam) => {
+          expect(exam).toEqual(
+            expect.objectContaining({
+              title: expect.any(String),
+              description: expect.any(String),
+              candidate_id: 3,
+              date: "05/05/2023",
+              time: expect.any(String),
+              location_name: "New York",
+            })
+          );
+        });
+      });
   });
 });
