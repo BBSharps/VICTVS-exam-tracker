@@ -1,4 +1,4 @@
-const app = require("../api/app");
+const app = require("../app");
 const request = require("supertest");
 const { seed } = require("../database/seed");
 const db = require("../database/index");
