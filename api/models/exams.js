@@ -2,7 +2,7 @@ const db = require("../../database/index");
 
 exports.selectExams = (id, location, date, order) => {
   const queryArray = [];
-  let queryString = `SELECT title, description, candidate_id, date, time, location_name FROM exams`;
+  let queryString = `SELECT title, description, candidate_id, date, time, exams.location_name, latitude, longitude FROM exams JOIN locations ON locations.location_name=exams.location_name`;
   if (id !== undefined || date !== undefined || location !== undefined) {
     queryString += ` WHERE`;
   }
@@ -22,16 +22,20 @@ exports.selectExams = (id, location, date, order) => {
     if (id !== undefined || date !== undefined) {
       queryString += ` AND`;
     }
-    queryString += ` (location_name = $${queryArray.indexOf(location) + 1})`;
+    queryString += ` (exams.location_name = $${
+      queryArray.indexOf(location) + 1
+    })`;
   }
   if (order !== undefined) {
     queryString += ` ORDER BY date`;
     order === "desc" ? (queryString += ` DESC`) : (queryString += ` ASC`);
   }
+
   return db.query(queryString, queryArray).then((res) => {
     if (location !== undefined && res.rowCount === 0) {
       return 400;
     }
+
     return res.rows;
   });
 };

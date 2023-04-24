@@ -31,6 +31,8 @@ describe("exams", () => {
               date: expect.any(String),
               time: expect.any(String),
               location_name: expect.any(String),
+              latitude: expect.any(Number),
+              longitude: expect.any(Number),
             })
           );
         });
@@ -51,6 +53,8 @@ describe("exams", () => {
               date: expect.any(String),
               time: expect.any(String),
               location_name: expect.any(String),
+              latitude: expect.any(Number),
+              longitude: expect.any(Number),
             })
           );
         });
@@ -82,6 +86,8 @@ describe("exams", () => {
               date: expect.any(String),
               time: expect.any(String),
               location_name: "London",
+              latitude: expect.any(Number),
+              longitude: expect.any(Number),
             })
           );
         });
@@ -105,6 +111,8 @@ describe("exams", () => {
               date: "17/06/2023",
               time: expect.any(String),
               location_name: expect.any(String),
+              latitude: expect.any(Number),
+              longitude: expect.any(Number),
             })
           );
         });
@@ -136,6 +144,8 @@ describe("exams", () => {
               date: "05/05/2023",
               time: expect.any(String),
               location_name: "New York",
+              latitude: expect.any(Number),
+              longitude: expect.any(Number),
             })
           );
         });
@@ -193,6 +203,8 @@ describe("exams", () => {
               date: expect.any(String),
               time: expect.any(String),
               location_name: "London",
+              latitude: expect.any(Number),
+              longitude: expect.any(Number),
             })
           );
         });
@@ -205,7 +217,6 @@ describe("exams", () => {
           .filter((exam) => {
             return exam !== undefined;
           });
-        console.log(sortedData);
         const examsDates = res.body.exams.map((exam) => {
           return exam.date;
         });
