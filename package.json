@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node listen.js",
-    "seed": "psql -f database/database.sql && node database/seed_exams.js && node database/seed_candidates.js && node database/seed_locations.js ",
-    "test": "jest"
+    "seed": "node database/run-seed.js",
+    "test": "jest",
+    "seed-prod": "NODE_ENV=production npm run seed"
   },
   "repository": {
     "type": "git",
