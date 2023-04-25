@@ -6,6 +6,19 @@ exports.getExams = (req, res, next) => {
   const location = req.query.location;
   const order = req.query.order;
   let query = true;
+  if (
+    [
+      "London",
+      "Sydney",
+      "Leeds",
+      "Berlin",
+      "Milan",
+      "Woking",
+      "New York",
+    ].indexOf(location) === -1
+  ) {
+    query = false;
+  }
   if (order !== undefined) {
     query = false;
     if (order === "asc" || order === "desc") {
