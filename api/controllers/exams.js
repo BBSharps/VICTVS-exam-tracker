@@ -7,6 +7,7 @@ exports.getExams = (req, res, next) => {
   const order = req.query.order;
   let query = true;
   if (
+    location !== undefined &&
     [
       "London",
       "Sydney",
