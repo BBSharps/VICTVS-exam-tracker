@@ -129,7 +129,7 @@ describe("exams", () => {
   test("GET/api/exams should return status 400 if using a query for a none existent date ", () => {
     return request(app).get("/api/exams?date=Banana").expect(400);
   });
-  test("GET/api/exams should return the requested data if using querys for date,location and id", () => {
+  test.only("GET/api/exams should return the requested data if using querys for date,location and id", () => {
     return request(app)
       .get("/api/exams?date=05/05/2023&id=3&location=New York")
       .expect(200)
@@ -150,6 +150,17 @@ describe("exams", () => {
           );
         });
       });
+  });
+  test.only("GET/api/exams should return the requested data if using querys for date,location and id", () => {
+    return request(app)
+      .get("/api/exams?id=0&location=Sydney")
+      .expect(200)
+      .then((res) => {
+        expect(res.body.exams.length).toBe(0);
+      });
+  });
+  test.only("GET/api/exams should return status 400 if using a query for a none existent location ", () => {
+    return request(app).get("/api/exams?location=Banana").expect(400);
   });
   test("GET/api/exams should return the requested data in date Descending if passed an order by desc", () => {
     return request(app)

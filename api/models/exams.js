@@ -32,10 +32,6 @@ exports.selectExams = (id, location, date, order) => {
   }
 
   return db.query(queryString, queryArray).then((res) => {
-    if (location !== undefined && res.rowCount === 0) {
-      return 400;
-    }
-
     return res.rows;
   });
 };
