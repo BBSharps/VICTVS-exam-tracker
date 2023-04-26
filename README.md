@@ -11,4 +11,7 @@ It returns information from a databse containing exam data and locations
 "GET /api/exams"  
 "GET /api/candidates"  
 
+### project plan:
+https://trello.com/b/kKSeFpwM/victvs-exam-tracker
 
+planing_digram.png
